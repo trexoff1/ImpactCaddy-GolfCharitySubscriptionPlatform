@@ -1,9 +1,23 @@
 import Link from "next/link";
 import { TIERS, type SubscriptionTier } from "@/lib/types";
+import { createClient } from "@/lib/supabase/server";
+import { formatCurrency } from "@/lib/currency";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = await createClient();
+  const { data: charities } = await supabase
+    .from("charities")
+    .select("*")
+    .eq("is_active", true)
+    .order("name");
+
+  // Featured = highest supporter count
+  const featured = charities
+    ? [...charities].sort((a, b) => (b.supporter_count || 0) - (a.supporter_count || 0))[0]
+    : null;
+
   return (
-    <div style={{ minHeight: "100vh" }}>
+    <div style={{ minHeight: "100vh", background: "var(--color-bg-primary)" }} className="fade-in">
       {/* ─── Nav ─── */}
       <nav
         style={{
@@ -12,35 +26,33 @@ export default function HomePage() {
           left: 0,
           right: 0,
           zIndex: 100,
-          padding: "16px 24px",
+          padding: "20px 32px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          background: "rgba(15,23,42,0.85)",
-          backdropFilter: "blur(12px)",
-          borderBottom: "1px solid rgba(148,163,184,0.08)",
+          background: "rgba(0,0,0,0.7)",
+          backdropFilter: "blur(20px)",
+          borderBottom: "1px solid var(--color-border)",
         }}
       >
         <div
           style={{
             fontFamily: "var(--font-heading)",
-            fontWeight: 800,
-            fontSize: "1.5rem",
-            background:
-              "linear-gradient(135deg, var(--color-success-400), var(--color-primary-400))",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
+            fontWeight: 700,
+            fontSize: "1.4rem",
+            letterSpacing: "-0.04em",
+            color: "var(--color-text-primary)",
+            display: "flex",
+            alignItems: "center",
+            gap: 8
           }}
         >
-          ⛳ GolfGives
+          <span style={{ color: "var(--color-impact-400)" }}>✨</span> ImpactCaddy
         </div>
-        <div style={{ display: "flex", gap: 12 }}>
-          <Link href="/auth/login" className="btn btn-ghost btn-sm">
-            Sign In
-          </Link>
-          <Link href="/auth/signup" className="btn btn-accent btn-sm">
-            Start Giving
-          </Link>
+        <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+          <Link href="/charities" style={{ color: "var(--color-text-secondary)", textDecoration: "none", fontSize: "0.9rem", fontWeight: 500 }} className="btn-ghost btn-sm">Global Impact</Link>
+          <Link href="/auth/login" style={{ color: "var(--color-text-secondary)", textDecoration: "none", fontSize: "0.9rem", fontWeight: 500 }} className="btn-ghost btn-sm">Sign In</Link>
+          <Link href="/auth/signup" className="btn btn-accent btn-sm premium-glow">Join the Movement</Link>
         </div>
       </nav>
 
@@ -53,280 +65,206 @@ export default function HomePage() {
           alignItems: "center",
           justifyContent: "center",
           textAlign: "center",
-          padding: "120px 24px 80px",
-          background:
-            "radial-gradient(ellipse at 50% 30%, rgba(99,102,241,0.18) 0%, transparent 60%), radial-gradient(ellipse at 80% 80%, rgba(16,185,129,0.1) 0%, transparent 40%)",
+          padding: "160px 24px 100px",
+          position: "relative",
+          overflow: "hidden"
         }}
       >
-        <div className="badge badge-success" style={{ marginBottom: 20 }}>
-          🏌️ Play Golf · Give Back
+        {/* Abstract background glow */}
+        <div style={{ position: "absolute", top: "20%", left: "50%", transform: "translateX(-50%)", width: "600px", height: "600px", background: "radial-gradient(circle, rgba(14,165,233,0.06) 0%, transparent 70%)", zIndex: 0 }}></div>
+
+        <div className="badge badge-info float-animation" style={{ marginBottom: 28 }}>
+          Building Legacies Through Sport
         </div>
 
         <h1
           style={{
             fontFamily: "var(--font-heading)",
-            fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+            fontSize: "clamp(3.5rem, 8vw, 6rem)",
             fontWeight: 800,
-            lineHeight: 1.1,
-            maxWidth: 800,
-            marginBottom: 24,
+            lineHeight: 0.95,
+            maxWidth: 1000,
+            marginBottom: 28,
+            letterSpacing: "-0.06em",
+            position: "relative",
+            zIndex: 1
           }}
         >
-          Every Round You Play{" "}
-          <span
-            style={{
-              background:
-                "linear-gradient(135deg, var(--color-success-400), var(--color-accent-400))",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            Changes Lives
-          </span>
+          Your Game.<br />
+          <span style={{ color: "var(--color-impact-400)" }}>Their Future.</span>
         </h1>
 
         <p
           style={{
-            maxWidth: 560,
-            fontSize: "1.125rem",
+            maxWidth: 600,
+            fontSize: "1.25rem",
             color: "var(--color-text-secondary)",
-            lineHeight: 1.7,
-            marginBottom: 40,
+            lineHeight: 1.6,
+            marginBottom: 48,
+            position: "relative",
+            zIndex: 1,
+            fontWeight: 400
           }}
         >
-          Subscribe, log your Stableford scores, and enter monthly charity draws.
-          Win prizes while your subscription fuels real impact for charities you
-          care about.
+          ImpactCaddy is an emotion-first subscription platform where every score you log translates directly into charitable power. Win prizes, track your game, and fund the causes that define your legacy.
         </p>
 
-        <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
-          <Link href="/auth/signup" className="btn btn-primary btn-lg">
-            Get Started — From £10/mo
+        <div style={{ display: "flex", gap: 20, flexWrap: "wrap", justifyContent: "center", position: "relative", zIndex: 1 }}>
+          <Link href="/auth/signup" className="btn btn-accent btn-lg premium-glow">
+            Start Your Impact
           </Link>
           <a href="#how-it-works" className="btn btn-ghost btn-lg">
-            How It Works ↓
+            Discover the Mission
           </a>
         </div>
 
-        {/* Stats strip */}
+        {/* Global Stats Split */}
         <div
           style={{
-            display: "flex",
-            gap: 48,
-            marginTop: 64,
-            flexWrap: "wrap",
-            justifyContent: "center",
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: 60,
+            marginTop: 100,
+            maxWidth: 900,
+            width: "100%",
+            position: "relative",
+            zIndex: 1
           }}
         >
           {[
-            { value: "£124K+", label: "Raised for charity" },
-            { value: "2,340", label: "Active golfers" },
-            { value: "58", label: "Monthly draws completed" },
+            { value: "₹1,42,500", label: "Direct Impact Raised", color: "var(--color-impact-400)" },
+            { value: "2,400+", label: "Golfer Legacies", color: "#fff" },
+            { value: "62", label: "Missions Completed", color: "#fff" },
           ].map((s) => (
             <div key={s.label} style={{ textAlign: "center" }}>
-              <div className="stat-counter" style={{ fontSize: "2.25rem" }}>
-                {s.value}
-              </div>
-              <div style={{ color: "var(--color-text-muted)", fontSize: "0.875rem", marginTop: 4 }}>
-                {s.label}
-              </div>
+              <div style={{ fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: "2.5rem", color: s.color }}>{s.value}</div>
+              <div style={{ color: "var(--color-text-muted)", fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: 8 }}>{s.label}</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ─── How It Works ─── */}
+      {/* ─── The Mission ─── */}
       <section
         id="how-it-works"
         style={{
-          padding: "100px 24px",
+          padding: "140px 24px",
           maxWidth: 1100,
           margin: "0 auto",
         }}
       >
-        <h2
-          style={{
-            textAlign: "center",
-            fontFamily: "var(--font-heading)",
-            fontSize: "2.25rem",
-            marginBottom: 16,
-          }}
-        >
-          How It Works
-        </h2>
-        <p
-          style={{
-            textAlign: "center",
-            color: "var(--color-text-secondary)",
-            maxWidth: 520,
-            margin: "0 auto 56px",
-          }}
-        >
-          Three simple steps to play golf, do good, and win prizes.
-        </p>
+        <div style={{ textAlign: "center", marginBottom: 80 }}>
+          <h2 style={{ fontSize: "3rem", marginBottom: 16 }}>The Cycle of Good</h2>
+          <p style={{ color: "var(--color-text-secondary)", maxWidth: 500, margin: "0 auto" }}>We believe the best way to win is to give. Here is how your subscription changes everything.</p>
+        </div>
 
-        <div className="stagger-children" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
+        <div className="stagger-children" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 32 }}>
           {[
             {
-              icon: "📋",
-              title: "1. Subscribe",
-              desc: "Choose Birdie, Eagle, or Albatross and get monthly draw entries and score tracking.",
+              title: "Choice",
+              desc: "Choose a mission. From clean water to youth education, pick the cause that resonates with your values.",
+              num: "01"
             },
             {
-              icon: "⛳",
-              title: "2. Play & Log",
-              desc: "Record your Stableford scores after each round. Every game counts toward your charity.",
+              title: "Consistency",
+              desc: "Play your rounds and log your scores. Every stroke recorded is a commitment to your chosen charity.",
+              num: "02"
             },
             {
-              icon: "🏆",
-              title: "3. Win & Give",
-              desc: "Monthly draws award prizes — a share goes directly to your chosen charity.",
+              title: "Momentum",
+              desc: "Win monthly prize pools while fueling a constant stream of support to frontline causes.",
+              num: "03"
             },
           ].map((step) => (
             <div
               key={step.title}
               className="glass-card"
-              style={{ padding: 32, textAlign: "center" }}
+              style={{ padding: 48, position: "relative", overflow: "hidden" }}
             >
-              <div style={{ fontSize: "2.5rem", marginBottom: 16 }}>{step.icon}</div>
-              <h3
-                style={{
-                  fontFamily: "var(--font-heading)",
-                  fontSize: "1.25rem",
-                  marginBottom: 12,
-                }}
-              >
-                {step.title}
-              </h3>
-              <p style={{ color: "var(--color-text-secondary)", fontSize: "0.9375rem", lineHeight: 1.6 }}>
-                {step.desc}
-              </p>
+              <div style={{ position: "absolute", top: -20, right: -10, fontSize: "8rem", fontWeight: 900, color: "rgba(255,255,255,0.02)", lineHeight: 1 }}>{step.num}</div>
+              <h3 style={{ fontSize: "1.5rem", marginBottom: 20 }}>{step.title}</h3>
+              <p style={{ color: "var(--color-text-secondary)", fontSize: "1.0625rem", lineHeight: 1.6 }}>{step.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ─── Pricing ─── */}
+      {/* ─── Featured Impact Portfolio ─── */}
       <section
         style={{
-          padding: "100px 24px",
-          background:
-            "radial-gradient(ellipse at 50% 50%, rgba(99,102,241,0.08) 0%, transparent 60%)",
+          padding: "140px 24px",
+          background: "linear-gradient(to bottom, transparent, var(--color-bg-secondary))",
+          borderTop: "1px solid var(--color-border)",
         }}
       >
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <h2
-            style={{
-              textAlign: "center",
-              fontFamily: "var(--font-heading)",
-              fontSize: "2.25rem",
-              marginBottom: 16,
-            }}
-          >
-            Choose Your Impact
-          </h2>
-          <p
-            style={{
-              textAlign: "center",
-              color: "var(--color-text-secondary)",
-              maxWidth: 480,
-              margin: "0 auto 56px",
-            }}
-          >
-            Every tier supports the charities you love. Upgrade anytime.
-          </p>
+          <div style={{ textAlign: "center", marginBottom: 64 }}>
+            <h2 style={{ fontSize: "3rem", marginBottom: 16 }}>Active Impact</h2>
+            <p style={{ color: "var(--color-text-secondary)" }}>Direct your rounds to the missions that matter most.</p>
+          </div>
 
-          <div
-            className="stagger-children"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-              gap: 24,
-            }}
-          >
+          {/* Spotlight Hero Card */}
+          {featured && (
+            <div className="glass-card" style={{ padding: 60, marginBottom: 40, position: "relative", overflow: "hidden", display: "flex", gap: 60, alignItems: "center", flexWrap: "wrap", border: "1px solid var(--color-impact-400)" }}>
+              <div style={{ position: "absolute", bottom: -50, right: -50, width: 300, height: 300, background: "radial-gradient(circle, rgba(14,165,233,0.1) 0%, transparent 70%)", zIndex: 0 }}></div>
+              <div style={{ flex: 1, minWidth: 300, position: "relative", zIndex: 1 }}>
+                <div style={{ color: "var(--color-impact-400)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.2em", fontSize: "0.75rem", marginBottom: 12 }}>Spotlight Mission</div>
+                <h3 style={{ fontSize: "2.5rem", marginBottom: 20 }}>{featured.name}</h3>
+                <p style={{ color: "var(--color-text-secondary)", fontSize: "1.25rem", lineHeight: 1.6, marginBottom: 32 }}>{featured.description}</p>
+                <div style={{ display: "flex", gap: 40, marginBottom: 40 }}>
+                  <div><div style={{ fontSize: "2rem", fontWeight: 700, color: "#fff" }}>{formatCurrency(featured.total_raised || 0)}</div><div style={{ color: "var(--color-text-muted)", fontSize: "0.8rem" }}>Impact Generated</div></div>
+                  <div><div style={{ fontSize: "2rem", fontWeight: 700, color: "#fff" }}>{featured.supporter_count || 0}</div><div style={{ color: "var(--color-text-muted)", fontSize: "0.8rem" }}>Advocates</div></div>
+                </div>
+                <div style={{ display: "flex", gap: 16 }}>
+                  <Link href={`/charities/${featured.slug}`} className="btn btn-primary">View Full Profile</Link>
+                  <Link href="/auth/signup" className="btn btn-accent premium-glow">Support This Mission</Link>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 24 }}>
+            {charities?.filter(c => c.id !== featured?.id).slice(0, 3).map((charity) => (
+              <div key={charity.id} className="glass-card" style={{ padding: 32 }}>
+                <h3 style={{ fontSize: "1.25rem", marginBottom: 16 }}>{charity.name}</h3>
+                <p style={{ color: "var(--color-text-secondary)", fontSize: "0.9375rem", marginBottom: 24, lineHeight: 1.5 }}>{charity.description.slice(0, 100)}...</p>
+                <Link href={`/charities/${charity.slug}`} style={{ color: "#fff", textDecoration: "none", fontSize: "0.875rem", fontWeight: 600 }}>Explore Mission →</Link>
+              </div>
+            ))}
+          </div>
+          <div style={{ textAlign: "center", marginTop: 60 }}>
+            <Link href="/charities" className="btn btn-ghost btn-lg">Explore Full Impact Portfolio</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Commitment Tiers ─── */}
+      <section style={{ padding: "140px 24px" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 80 }}>
+            <h2 style={{ fontSize: "3.5rem", marginBottom: 16 }}>Join the Movement</h2>
+            <p style={{ color: "var(--color-text-secondary)" }}>Choose your level of commitment to global good.</p>
+          </div>
+
+          <div className="stagger-children" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 32 }}>
             {(Object.entries(TIERS) as [SubscriptionTier, typeof TIERS[SubscriptionTier]][]).map(
               ([key, tier]) => (
-                <div
-                  key={key}
-                  className="glass-card"
-                  style={{
-                    padding: 36,
-                    display: "flex",
-                    flexDirection: "column",
-                    border:
-                      key === "eagle"
-                        ? "1px solid rgba(99,102,241,0.4)"
-                        : undefined,
-                    position: "relative",
-                  }}
-                >
-                  {key === "eagle" && (
-                    <div
-                      className="badge badge-info"
-                      style={{
-                        position: "absolute",
-                        top: -10,
-                        right: 20,
-                      }}
-                    >
-                      Popular
-                    </div>
-                  )}
-
-                  <h3
-                    style={{
-                      fontFamily: "var(--font-heading)",
-                      fontSize: "1.5rem",
-                      color: tier.color,
-                      marginBottom: 8,
-                    }}
-                  >
-                    {tier.name}
-                  </h3>
-
-                  <p style={{ color: "var(--color-text-secondary)", fontSize: "0.875rem", marginBottom: 20 }}>
-                    {tier.description}
-                  </p>
-
-                  <div style={{ marginBottom: 24 }}>
-                    <span
-                      style={{
-                        fontFamily: "var(--font-heading)",
-                        fontSize: "2.5rem",
-                        fontWeight: 800,
-                      }}
-                    >
-                      £{tier.price}
-                    </span>
-                    <span style={{ color: "var(--color-text-muted)", fontSize: "0.9375rem" }}>/mo</span>
+                <div key={key} className="glass-card" style={{ padding: 48, display: "flex", flexDirection: "column", border: key === "eagle" ? "1px solid var(--color-impact-400)" : undefined, position: "relative" }}>
+                  {key === "eagle" && <div className="badge badge-info" style={{ position: "absolute", top: 20, right: 20 }}>Most Effective</div>}
+                  <h3 style={{ fontSize: "1.75rem", marginBottom: 8 }}>{tier.name}</h3>
+                  <p style={{ color: "var(--color-text-secondary)", fontSize: "0.9375rem", marginBottom: 28 }}>{tier.description}</p>
+                  <div style={{ marginBottom: 40 }}>
+                    <span style={{ fontSize: "3rem", fontWeight: 800 }}>{formatCurrency(tier.price)}</span>
+                    <span style={{ color: "var(--color-text-muted)", fontSize: "1.125rem" }}> /month</span>
                   </div>
-
-                  <ul style={{ listStyle: "none", flex: 1, marginBottom: 24 }}>
+                  <ul style={{ listStyle: "none", flex: 1, marginBottom: 40 }}>
                     {tier.features.map((f) => (
-                      <li
-                        key={f}
-                        style={{
-                          padding: "8px 0",
-                          color: "var(--color-text-secondary)",
-                          fontSize: "0.9375rem",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 8,
-                        }}
-                      >
-                        <span style={{ color: "var(--color-success-400)" }}>✓</span>
-                        {f}
+                      <li key={f} style={{ padding: "10px 0", color: "var(--color-text-secondary)", fontSize: "1rem", display: "flex", alignItems: "center", gap: 12 }}>
+                        <span style={{ color: "var(--color-impact-400)" }}>✨</span> {f}
                       </li>
                     ))}
                   </ul>
-
-                  <Link
-                    href="/auth/signup"
-                    className={`btn ${key === "eagle" ? "btn-primary" : "btn-ghost"}`}
-                    style={{ width: "100%" }}
-                  >
-                    Get {tier.name}
-                  </Link>
+                  <Link href="/auth/signup" className={`btn btn-lg ${key === "eagle" ? "btn-accent premium-glow" : "btn-primary"}`}>Commit to {tier.name}</Link>
                 </div>
               )
             )}
@@ -334,31 +272,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── Footer ─── */}
-      <footer
-        style={{
-          padding: "48px 24px",
-          borderTop: "1px solid rgba(148,163,184,0.08)",
-          textAlign: "center",
-          color: "var(--color-text-muted)",
-          fontSize: "0.875rem",
-        }}
-      >
-        <div
-          style={{
-            fontFamily: "var(--font-heading)",
-            fontWeight: 800,
-            fontSize: "1.25rem",
-            marginBottom: 12,
-            background:
-              "linear-gradient(135deg, var(--color-success-400), var(--color-primary-400))",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}
-        >
-          ⛳ GolfGives
+      {/* ─── Minimal Footer ─── */}
+      <footer style={{ padding: "100px 24px 60px", borderTop: "1px solid var(--color-border)", textAlign: "center", color: "var(--color-text-muted)" }}>
+        <div style={{ fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: "1.5rem", letterSpacing: "-0.04em", marginBottom: 16, color: "#fff" }}>ImpactCaddy</div>
+        <p style={{ marginBottom: 40 }}>A legacy of impact through the spirit of play.</p>
+        <div style={{ display: "flex", justifyContent: "center", gap: 32, fontSize: "0.875rem" }}>
+          <Link href="/charities" style={{ color: "inherit", textDecoration: "none" }}>Our Partners</Link>
+          <Link href="/auth/signup" style={{ color: "inherit", textDecoration: "none" }}>Join Mission</Link>
+          <a href="#" style={{ color: "inherit", textDecoration: "none" }}>Terms of Legacy</a>
         </div>
-        <p>Play Golf. Change Lives. © {new Date().getFullYear()}</p>
+        <div style={{ marginTop: 60, opacity: 0.5, fontSize: "0.75rem" }}>© {new Date().getFullYear()} ImpactCaddy. All legacies preserved.</div>
       </footer>
     </div>
   );

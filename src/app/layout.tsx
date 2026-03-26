@@ -15,13 +15,13 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "GolfGives — Play Golf. Change Lives.",
+  title: "ImpactCaddy — Play Golf. Change the World.",
   description:
-    "Subscribe, enter your Stableford scores, and automatically give to charity. Every round you play makes a difference.",
-  keywords: ["golf", "charity", "stableford", "subscription", "donate"],
+    "Join the movement mapping golf rounds to global impact. Every round you play fuels a legacy of change.",
+  keywords: ["golf charity", "impact rounds", "legacy play", "stableford impact", "give back"],
   openGraph: {
-    title: "GolfGives — Play Golf. Change Lives.",
-    description: "Every round you play makes a difference.",
+    title: "ImpactCaddy — Play Golf. Change the World.",
+    description: "Every round you play fuels a legacy of change.",
     type: "website",
   },
 };

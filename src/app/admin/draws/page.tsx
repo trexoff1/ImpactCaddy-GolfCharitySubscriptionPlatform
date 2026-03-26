@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { formatCurrency } from "@/lib/currency";
 
 type DrawMode = "random" | "algorithmic";
 
@@ -139,24 +140,24 @@ export default function AdminDrawsPage() {
           </div>
 
           <button className="btn btn-primary" type="button" onClick={runSimulation} disabled={!drawId || simulating}>
-            {simulating ? "Simulating..." : "Run Simulation"}
+            {simulating ? "Simulating..." : "Test Mission"}
           </button>
 
           <button
-            className="btn btn-accent"
+            className="btn btn-accent premium-glow"
             type="button"
             onClick={publishResults}
             disabled={!drawId || !simulation || publishing || selectedDraw?.status !== "active"}
           >
-            {publishing ? "Publishing..." : "Publish Results"}
+            {publishing ? "Finalizing..." : "Publish Results"}
           </button>
         </div>
       </div>
 
       {simulation && (
         <div className="glass-card" style={{ padding: 24 }}>
-          <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "1.125rem", marginBottom: 12 }}>Simulation Output</h2>
-          <p style={{ color: "var(--color-text-secondary)", marginBottom: 14 }}>
+          <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "1.25rem", marginBottom: 16 }}>Test Mission Result</h2>
+          <p style={{ color: "var(--color-text-secondary)", marginBottom: 16 }}>
             Participants: {simulation.participants}
           </p>
 
@@ -172,17 +173,17 @@ export default function AdminDrawsPage() {
             <div className="glass-card" style={{ padding: 14 }}>
               <div style={{ color: "var(--color-text-muted)", fontSize: "0.75rem" }}>5-Match Winners</div>
               <div className="stat-counter">{simulation.winnerCounts[5]}</div>
-              <div style={{ fontSize: "0.8rem", color: "var(--color-text-secondary)" }}>Each: £{simulation.payoutPreview.fiveMatchEach}</div>
+              <div style={{ fontSize: "0.8rem", color: "var(--color-text-secondary)" }}>Each: {formatCurrency(simulation.payoutPreview.fiveMatchEach)}</div>
             </div>
             <div className="glass-card" style={{ padding: 14 }}>
               <div style={{ color: "var(--color-text-muted)", fontSize: "0.75rem" }}>4-Match Winners</div>
               <div className="stat-counter">{simulation.winnerCounts[4]}</div>
-              <div style={{ fontSize: "0.8rem", color: "var(--color-text-secondary)" }}>Each: £{simulation.payoutPreview.fourMatchEach}</div>
+              <div style={{ fontSize: "0.8rem", color: "var(--color-text-secondary)" }}>Each: {formatCurrency(simulation.payoutPreview.fourMatchEach)}</div>
             </div>
             <div className="glass-card" style={{ padding: 14 }}>
               <div style={{ color: "var(--color-text-muted)", fontSize: "0.75rem" }}>3-Match Winners</div>
               <div className="stat-counter">{simulation.winnerCounts[3]}</div>
-              <div style={{ fontSize: "0.8rem", color: "var(--color-text-secondary)" }}>Each: £{simulation.payoutPreview.threeMatchEach}</div>
+              <div style={{ fontSize: "0.8rem", color: "var(--color-text-secondary)" }}>Each: {formatCurrency(simulation.payoutPreview.threeMatchEach)}</div>
             </div>
           </div>
 

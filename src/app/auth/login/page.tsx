@@ -43,38 +43,44 @@ export default function LoginPage() {
         alignItems: "center",
         justifyContent: "center",
         padding: "24px",
-        background:
-          "radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.15) 0%, transparent 60%)",
+        background: "var(--color-bg-primary)",
+        position: "relative",
+        overflow: "hidden"
       }}
     >
-      <div className="glass-card fade-in" style={{ maxWidth: 420, width: "100%", padding: 40 }}>
+      <div style={{ position: "absolute", top: "20%", left: "50%", transform: "translateX(-50%)", width: "400px", height: "400px", background: "radial-gradient(circle, rgba(14,165,233,0.05) 0%, transparent 70%)", zIndex: 0 }}></div>
+
+      <div className="glass-card fade-in" style={{ maxWidth: 420, width: "100%", padding: 60, position: "relative", zIndex: 1 }}>
         {/* Logo */}
-        <div style={{ textAlign: "center", marginBottom: 32 }}>
+        <div style={{ textAlign: "center", marginBottom: 40 }}>
           <div
             style={{
-              fontSize: "2rem",
+              fontSize: "2.25rem",
               fontFamily: "var(--font-heading)",
               fontWeight: 800,
-              background: "linear-gradient(135deg, var(--color-success-400), var(--color-primary-400))",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
+              letterSpacing: "-0.06em",
+              color: "var(--color-text-primary)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 12
             }}
           >
-            ⛳ GolfGives
+            <span style={{ color: "var(--color-impact-400)" }}>✨</span> ImpactCaddy
           </div>
-          <p style={{ color: "var(--color-text-secondary)", marginTop: 8, fontSize: "0.9375rem" }}>
-            Sign in to your account
+          <p style={{ color: "var(--color-text-secondary)", marginTop: 12, fontSize: "1rem" }}>
+            Return to your mission
           </p>
         </div>
 
-        <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+        <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           <div>
-            <label className="input-label" htmlFor="email">Email</label>
+            <label className="input-label" htmlFor="email" style={{ marginBottom: 12 }}>Email Address</label>
             <input
               id="email"
               type="email"
               className="input-field"
-              placeholder="you@example.com"
+              placeholder="you@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -82,7 +88,7 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="input-label" htmlFor="password">Password</label>
+            <label className="input-label" htmlFor="password" style={{ marginBottom: 12 }}>Password</label>
             <input
               id="password"
               type="password"
@@ -97,7 +103,7 @@ export default function LoginPage() {
           {error && (
             <div
               style={{
-                padding: "10px 14px",
+                padding: "12px 16px",
                 borderRadius: "var(--radius-md)",
                 background: "rgba(239,68,68,0.1)",
                 color: "var(--color-danger-400)",
@@ -108,22 +114,22 @@ export default function LoginPage() {
             </div>
           )}
 
-          <button type="submit" className="btn btn-primary btn-lg" disabled={loading} style={{ width: "100%" }}>
-            {loading ? "Signing in…" : "Sign In"}
+          <button type="submit" className="btn btn-accent btn-lg premium-glow" disabled={loading} style={{ width: "100%", marginTop: 12 }}>
+            {loading ? "Verifying…" : "Sign In to Impact"}
           </button>
         </form>
 
         <p
           style={{
             textAlign: "center",
-            marginTop: 24,
+            marginTop: 32,
             color: "var(--color-text-muted)",
             fontSize: "0.875rem",
           }}
         >
-          Don&apos;t have an account?{" "}
-          <Link href="/auth/signup" style={{ color: "var(--color-primary-400)", textDecoration: "none" }}>
-            Sign up
+          New to the movement?{" "}
+          <Link href="/auth/signup" style={{ color: "var(--color-impact-400)", textDecoration: "none", fontWeight: 600 }}>
+            Create an Account
           </Link>
         </p>
       </div>

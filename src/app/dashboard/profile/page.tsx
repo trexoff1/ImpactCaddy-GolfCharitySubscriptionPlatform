@@ -143,9 +143,9 @@ export default function ProfilePage() {
   }
 
   const tierData: Record<Tier, { label: string; color: string; icon: string; monthly: string; yearly: string }> = {
-    birdie: { label: "Birdie", color: "var(--color-success-400)", icon: "🐦", monthly: "£10/mo", yearly: "£96/yr" },
-    eagle: { label: "Eagle", color: "var(--color-primary-400)", icon: "🦅", monthly: "£25/mo", yearly: "£240/yr" },
-    albatross: { label: "Albatross", color: "var(--color-accent-400)", icon: "🏆", monthly: "£50/mo", yearly: "£480/yr" },
+    birdie: { label: "Birdie", color: "var(--color-success-400)", icon: "🐦", monthly: "₹999/mo", yearly: "₹9,999/yr" },
+    eagle: { label: "Eagle", color: "var(--color-primary-400)", icon: "🦅", monthly: "₹2,499/mo", yearly: "₹24,999/yr" },
+    albatross: { label: "Albatross", color: "var(--color-accent-400)", icon: "🏆", monthly: "₹4,999/mo", yearly: "₹49,999/yr" },
   };
 
   const isActive = subscriptionStatus === "active" || subscriptionStatus === "trialing";
@@ -154,7 +154,7 @@ export default function ProfilePage() {
     <div className="fade-in">
       <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "1.75rem", marginBottom: 4 }}>Profile</h1>
       <p style={{ color: "var(--color-text-secondary)", marginBottom: 32 }}>
-        Manage your GolfGives profile and settings.
+        Manage your ImpactCaddy profile and settings.
       </p>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 28 }}>

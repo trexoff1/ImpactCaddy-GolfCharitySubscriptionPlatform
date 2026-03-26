@@ -87,14 +87,14 @@ export default function DrawsPage() {
 
   return (
     <div className="fade-in">
-      <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "1.75rem", marginBottom: 4 }}>Draws</h1>
-      <p style={{ color: "var(--color-text-secondary)", marginBottom: 32 }}>
-        Enter monthly draws to win prizes. Play more rounds to earn more entries!
+      <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "2rem", marginBottom: 4, letterSpacing: "-0.04em" }}>Impact Draws</h1>
+      <p style={{ color: "var(--color-text-secondary)", marginBottom: 40, fontSize: "1.125rem" }}>
+        Every draw entry is a step toward global good. Play more, win more, give more.
       </p>
 
       {/* Active draws */}
-      <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "1.125rem", marginBottom: 16 }}>
-        🎰 Active Draws
+      <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "1.25rem", marginBottom: 24 }}>
+        ✨ Current Missions
       </h2>
       {activeDraws.length === 0 ? (
         <div className="glass-card" style={{ padding: 48, textAlign: "center", marginBottom: 40 }}>
@@ -117,7 +117,7 @@ export default function DrawsPage() {
                   left: 0,
                   right: 0,
                   height: 4,
-                  background: "linear-gradient(90deg, var(--color-primary-500), var(--color-accent-500))",
+                  background: "var(--color-primary-600)",
                 }}
               />
               <div style={{ fontSize: "2rem", marginBottom: 12 }}>🏆</div>
@@ -139,12 +139,12 @@ export default function DrawsPage() {
                 </button>
               ) : (
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-accent premium-glow"
                   onClick={() => enterDraw(draw.id)}
                   disabled={submittingDrawId === draw.id}
                   style={{ width: "100%", justifyContent: "center" }}
                 >
-                  {submittingDrawId === draw.id ? "Entering..." : "Enter Draw"}
+                  {submittingDrawId === draw.id ? "Entering..." : "Commit to Draw"}
                 </button>
               )}
             </div>
@@ -159,7 +159,8 @@ export default function DrawsPage() {
             📜 Past Draws
           </h2>
           <div className="glass-card" style={{ overflow: "hidden" }}>
-            <table className="data-table">
+            <div className="table-responsive">
+              <table className="data-table">
               <thead>
                 <tr>
                   <th>Draw</th>
@@ -186,7 +187,8 @@ export default function DrawsPage() {
               </tbody>
             </table>
           </div>
-        </>
+        </div>
+      </>
       )}
     </div>
   );

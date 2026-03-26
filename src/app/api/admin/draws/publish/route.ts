@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAdminUser } from "@/lib/admin-auth";
 import { countMatches, runDrawSimulation, type DrawMode, type SimulationParticipant } from "@/lib/draw-engine";
+import { emails } from "@/lib/email/service";
 
 interface PublishBody {
   drawId: string;
@@ -58,7 +59,7 @@ export async function POST(request: Request) {
   const admin = createAdminClient();
   const { data: draw } = await admin
     .from("draws")
-    .select("id, total_pool, status")
+    .select("id, title, total_pool, status")
     .eq("id", body.drawId)
     .single();
 
@@ -122,6 +123,45 @@ export async function POST(request: Request) {
   if (winnersToInsert.length > 0) {
     await admin.from("draw_winners").insert(winnersToInsert);
   }
+
+  // --- Email Notifications (Run async) ---
+  (async () => {
+    // Fetch user profiles for participants to get emails/names
+    const userIds = participants.map(p => p.userId);
+    const { data: profiles } = await admin
+      .from("profiles")
+      .select("id, email, display_name")
+      .in("id", userIds);
+
+    if (!profiles) return;
+
+    for (const profile of profiles) {
+      const participant = participants.find(p => p.userId === profile.id);
+      if (!participant) continue;
+
+      const matches = countMatches(participant.scores, winningNumbers);
+      const isWinner = matches >= 3;
+
+      // Send Draw Results
+      await emails.drawResults(
+        profile.email,
+        profile.display_name || "Hero",
+        draw.title || "Monthly Draw",
+        matches
+      );
+
+      // Send Winner Alert if applicable
+      if (isWinner) {
+        const prize = winnersToInsert.find(w => w.user_id === profile.id);
+        await emails.winnerAlert(
+          profile.email,
+          profile.display_name || "Hero",
+          draw.title || "Monthly Draw",
+          `₹${prize?.prize_amount || 0}`
+        );
+      }
+    }
+  })().catch(err => console.error("Email notification error:", err));
 
   return NextResponse.json({
     drawId: body.drawId,

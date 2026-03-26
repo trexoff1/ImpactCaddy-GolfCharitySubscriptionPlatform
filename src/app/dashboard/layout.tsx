@@ -6,13 +6,13 @@ import { createClient } from "@/lib/supabase/client";
 import { useState, useEffect } from "react";
 
 const NAV_ITEMS = [
-  { href: "/dashboard", label: "Overview", icon: "📊" },
-  { href: "/dashboard/scores", label: "My Scores", icon: "⛳" },
-  { href: "/dashboard/draws", label: "Draws", icon: "🎰" },
-  { href: "/dashboard/leaderboard", label: "Leaderboard", icon: "🏆" },
-  { href: "/dashboard/winnings", label: "My Winnings", icon: "💸" },
-  { href: "/dashboard/charity", label: "My Charity", icon: "❤️" },
-  { href: "/dashboard/profile", label: "Profile", icon: "👤" },
+  { href: "/dashboard", label: "Impact Hub", icon: "📊" },
+  { href: "/dashboard/scores", label: "My Legacies", icon: "⛳" },
+  { href: "/dashboard/draws", label: "Missions", icon: "🎯" },
+  { href: "/dashboard/leaderboard", label: "Impact Board", icon: "🏆" },
+  { href: "/dashboard/winnings", label: "My Rewards", icon: "💸" },
+  { href: "/dashboard/charity", label: "My Missions", icon: "❤️" },
+  { href: "/dashboard/profile", label: "Identity", icon: "👤" },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -75,8 +75,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         style={{
           width: collapsed ? 72 : 260,
           transition: "width 0.3s cubic-bezier(0.4,0,0.2,1), transform 0.3s ease",
-          background: "rgba(15,23,42,0.95)",
-          borderRight: "1px solid rgba(148,163,184,0.08)",
+          background: "rgba(10,10,10,0.95)",
+          borderRight: "1px solid var(--color-border)",
           display: "flex",
           flexDirection: "column",
           position: "fixed",
@@ -92,7 +92,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div
           style={{
             padding: collapsed ? "20px 12px" : "20px 24px",
-            borderBottom: "1px solid rgba(148,163,184,0.08)",
+            borderBottom: "1px solid var(--color-border)",
             display: "flex",
             alignItems: "center",
             justifyContent: collapsed ? "center" : "space-between",
@@ -104,16 +104,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 fontFamily: "var(--font-heading)",
                 fontWeight: 800,
                 fontSize: "1.25rem",
-                background:
-                  "linear-gradient(135deg, var(--color-success-400), var(--color-primary-400))",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
+                color: "var(--color-text-primary)",
+                display: "flex",
+                alignItems: "center",
+                gap: 8
               }}
             >
-              ⛳ GolfGives
+              <span style={{ color: "var(--color-impact-400)" }}>✨</span> ImpactCaddy
             </div>
           )}
-          {collapsed && <span style={{ fontSize: "1.5rem" }}>⛳</span>}
+          {collapsed && <span style={{ fontSize: "1.5rem", color: "var(--color-impact-400)" }}>✨</span>}
           <button
             onClick={() => setCollapsed(!collapsed)}
             style={{
@@ -145,12 +145,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   padding: collapsed ? "12px 0" : "10px 16px",
                   justifyContent: collapsed ? "center" : "flex-start",
                   borderRadius: "var(--radius-md)",
-                  color: active ? "var(--color-primary-300)" : "var(--color-text-secondary)",
-                  background: active ? "rgba(99,102,241,0.1)" : "transparent",
+                  color: active ? "var(--color-impact-300)" : "var(--color-text-secondary)",
+                  background: active ? "rgba(14,165,233,0.1)" : "transparent",
                   textDecoration: "none",
                   fontSize: "0.9375rem",
                   fontWeight: active ? 600 : 400,
                   transition: "all 0.2s",
+                  borderLeft: active ? "3px solid var(--color-impact-400)" : "3px solid transparent",
                 }}
               >
                 <span style={{ fontSize: "1.25rem" }}>{item.icon}</span>
@@ -164,7 +165,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div
           style={{
             padding: collapsed ? "16px 8px" : "16px 20px",
-            borderTop: "1px solid rgba(148,163,184,0.08)",
+            borderTop: "1px solid var(--color-border)",
           }}
         >
           {!collapsed && user && (
@@ -207,7 +208,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             padding: "16px 24px",
             display: "none",
             alignItems: "center",
-            borderBottom: "1px solid rgba(148,163,184,0.08)",
+            borderBottom: "1px solid var(--color-border)",
           }}
           className="mobile-topbar"
         >

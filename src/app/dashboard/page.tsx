@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
+import { formatCurrency } from "@/lib/currency";
 
 interface DashboardData {
   displayName: string;
@@ -103,7 +104,7 @@ export default function DashboardPage() {
         Welcome back, {data.displayName} 👋
       </h1>
       <p style={{ color: "var(--color-text-secondary)", marginBottom: 32 }}>
-        Here&apos;s your GolfGives overview.
+        Here&apos;s your ImpactCaddy overview.
       </p>
 
       {/* Stat cards */}
@@ -117,27 +118,35 @@ export default function DashboardPage() {
         }}
       >
         {[
-          { label: "Total Rounds", value: data.totalRounds.toString(), icon: "⛳", color: "var(--color-success-400)" },
-          { label: "Avg Score", value: data.avgScore.toString(), icon: "📊", color: "var(--color-primary-400)" },
+          { label: "Total Rounds", value: data.totalRounds.toString(), icon: "⛳", color: "#fff" },
+          { label: "Avg Score", value: data.avgScore.toString(), icon: "📊", color: "#fff" },
           { label: "Best Score", value: data.bestScore.toString(), icon: "🏆", color: "var(--color-accent-400)" },
           {
             label: "Subscription",
             value: `${data.subscriptionStatus.replace("_", " ")} · ${data.billingInterval}`,
             icon: "💳",
-            color: "var(--color-primary-400)",
+            color: "#fff",
           },
-          { label: "Draw Entries", value: data.drawEntries.toString(), icon: "🎰", color: "var(--color-warning-400)" },
-          { label: "Charity Impact", value: `£${data.charityTotal}`, icon: "❤️", color: "#f472b6" },
+          { label: "Draw Entries", value: data.drawEntries.toString(), icon: "🎰", color: "#fff" },
+          { label: "Charity Impact", value: formatCurrency(data.charityTotal), icon: "✨", color: "var(--color-impact-400)" },
         ].map((stat) => (
-          <div className="glass-card" key={stat.label} style={{ padding: 24 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+          <div className="glass-card" key={stat.label} style={{ padding: 24, position: "relative", overflow: "hidden" }}>
+            {stat.label === "Charity Impact" && (
+              <div style={{ position: "absolute", bottom: -20, right: -10, width: 80, height: 80, background: "radial-gradient(circle, rgba(14,165,233,0.1) 0%, transparent 70%)" }}></div>
+            )}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", position: "relative", zIndex: 1 }}>
               <div>
-                <div style={{ color: "var(--color-text-muted)", fontSize: "0.8125rem", marginBottom: 8 }}>
+                <div style={{ color: "var(--color-text-muted)", fontSize: "0.75rem", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 700 }}>
                   {stat.label}
                 </div>
                 <div
-                  className="stat-counter"
-                  style={{ fontSize: stat.label === "Subscription" ? "1.25rem" : "2rem", color: stat.color }}
+                  style={{ 
+                    fontFamily: "var(--font-heading)",
+                    fontWeight: 700,
+                    fontSize: stat.label === "Subscription" ? "1.25rem" : "2.25rem", 
+                    color: stat.color,
+                    letterSpacing: "-0.04em"
+                  }}
                 >
                   {stat.value}
                 </div>
@@ -147,7 +156,7 @@ export default function DashboardPage() {
                   </div>
                 )}
               </div>
-              <span style={{ fontSize: "1.75rem" }}>{stat.icon}</span>
+              <span style={{ fontSize: "1.5rem", opacity: 0.5 }}>{stat.icon}</span>
             </div>
           </div>
         ))}

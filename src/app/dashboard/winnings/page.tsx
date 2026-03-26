@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { formatCurrency } from "@/lib/currency";
 
 type PaymentState = "pending" | "paid" | "rejected";
 
@@ -66,7 +67,7 @@ export default function WinningsPage() {
 
       <div className="glass-card" style={{ padding: 20, marginBottom: 20 }}>
         <div style={{ color: "var(--color-text-muted)", fontSize: "0.8rem" }}>Total Paid</div>
-        <div className="stat-counter" style={{ fontSize: "2rem", color: "var(--color-success-400)" }}>£{totalWon.toFixed(2)}</div>
+        <div className="stat-counter" style={{ fontSize: "2rem", color: "var(--color-success-400)" }}>{formatCurrency(totalWon)}</div>
       </div>
 
       {rows.length === 0 ? (
@@ -93,7 +94,7 @@ export default function WinningsPage() {
                 </div>
               </div>
 
-              <p style={{ marginTop: 10, marginBottom: 10 }}>Prize: <strong>£{Number(row.prize_amount).toFixed(2)}</strong></p>
+              <p style={{ marginTop: 10, marginBottom: 10 }}>Prize: <strong>{formatCurrency(row.prize_amount)}</strong></p>
 
               {row.proof_image_url ? (
                 <p style={{ fontSize: "0.85rem" }}>

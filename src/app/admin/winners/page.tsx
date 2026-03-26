@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { formatCurrency } from "@/lib/currency";
 
 type PaymentState = "pending" | "paid" | "rejected";
 
@@ -63,13 +64,13 @@ export default function AdminWinnersPage() {
       <div className="glass-card" style={{ overflow: "hidden" }}>
         <table className="data-table">
           <thead>
-            <tr>
-              <th>Draw</th>
-              <th>Winner</th>
+            <tr style={{ fontFamily: "var(--font-heading)" }}>
+              <th>Mission Draw</th>
+              <th>Impact Winner</th>
               <th>Tier</th>
               <th>Prize</th>
               <th>Proof</th>
-              <th>Status</th>
+              <th>Impact Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -87,7 +88,7 @@ export default function AdminWinnersPage() {
                   <div style={{ color: "var(--color-text-muted)", fontSize: "0.75rem" }}>{row.profiles?.email || row.user_id}</div>
                 </td>
                 <td><span className="badge badge-info">{row.match_tier}-match</span></td>
-                <td>£{Number(row.prize_amount).toFixed(2)}</td>
+                <td>{formatCurrency(row.prize_amount)}</td>
                 <td>
                   {row.proof_image_url ? (
                     <a href={row.proof_image_url} target="_blank" rel="noreferrer" style={{ color: "var(--color-primary-400)", textDecoration: "none" }}>

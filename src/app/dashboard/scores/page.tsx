@@ -156,11 +156,11 @@ export default function ScoresPage() {
     <div className="fade-in">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
         <div>
-          <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "1.75rem", marginBottom: 4 }}>My Scores</h1>
-          <p style={{ color: "var(--color-text-secondary)" }}>Track your Stableford scores across all rounds.</p>
+          <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "2rem", marginBottom: 4, letterSpacing: "-0.04em" }}>My Legacies</h1>
+          <p style={{ color: "var(--color-text-secondary)" }}>Track the rounds that fuel your impact.</p>
         </div>
-        <button className="btn btn-primary" onClick={() => setShowForm(!showForm)}>
-          {showForm ? "✕ Cancel" : "➕ Log Score"}
+        <button className="btn btn-accent premium-glow" onClick={() => setShowForm(!showForm)}>
+          {showForm ? "✕ Close Mission" : "➕ Log Round"}
         </button>
       </div>
 
@@ -260,7 +260,8 @@ export default function ScoresPage() {
         </div>
       ) : (
         <div className="glass-card" style={{ overflow: "hidden" }}>
-          <table className="data-table">
+          <div className="table-responsive">
+            <table className="data-table">
             <thead>
               <tr>
                 <th>Date</th>
@@ -330,6 +331,7 @@ export default function ScoresPage() {
             </tbody>
           </table>
         </div>
+      </div>
       )}
 
       {/* Summary stats */}

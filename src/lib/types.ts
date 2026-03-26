@@ -107,7 +107,7 @@ export interface TierConfig {
 export const TIERS: Record<SubscriptionTier, TierConfig> = {
   birdie: {
     name: "Birdie",
-    price: 10,
+    price: 999,
     drawEntries: 1,
     description: "Get started with a single entry",
     features: [
@@ -120,7 +120,7 @@ export const TIERS: Record<SubscriptionTier, TierConfig> = {
   },
   eagle: {
     name: "Eagle",
-    price: 25,
+    price: 2499,
     drawEntries: 3,
     description: "More chances to win & give",
     features: [
@@ -134,7 +134,7 @@ export const TIERS: Record<SubscriptionTier, TierConfig> = {
   },
   albatross: {
     name: "Albatross",
-    price: 50,
+    price: 4999,
     drawEntries: 7,
     description: "Maximum impact",
     features: [

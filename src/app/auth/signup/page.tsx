@@ -73,6 +73,9 @@ export default function SignupPage() {
       return;
     }
 
+    // Trigger welcome email (non-blocking)
+    fetch("/api/auth/welcome", { method: "POST" }).catch(console.error);
+
     router.push("/dashboard");
     router.refresh();
   }
@@ -86,26 +89,31 @@ export default function SignupPage() {
         justifyContent: "center",
         padding: "24px",
         background:
-          "radial-gradient(ellipse at 50% 0%, rgba(16,185,129,0.12) 0%, transparent 60%)",
+          "radial-gradient(circle at 50% 0%, rgba(255,255,255,0.03) 0%, transparent 60%)",
       }}
     >
-      <div className="glass-card fade-in" style={{ maxWidth: 420, width: "100%", padding: 40 }}>
+      <div style={{ position: "absolute", top: "20%", left: "50%", transform: "translateX(-50%)", width: "400px", height: "400px", background: "radial-gradient(circle, rgba(14,165,233,0.05) 0%, transparent 70%)", zIndex: 0 }}></div>
+
+      <div className="glass-card fade-in" style={{ maxWidth: 420, width: "100%", padding: 60, position: "relative", zIndex: 1 }}>
         {/* Logo */}
-        <div style={{ textAlign: "center", marginBottom: 32 }}>
+        <div style={{ textAlign: "center", marginBottom: 40 }}>
           <div
             style={{
-              fontSize: "2rem",
+              fontSize: "2.25rem",
               fontFamily: "var(--font-heading)",
               fontWeight: 800,
-              background: "linear-gradient(135deg, var(--color-success-400), var(--color-primary-400))",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
+              letterSpacing: "-0.06em",
+              color: "var(--color-text-primary)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 12
             }}
           >
-            ⛳ GolfGives
+            <span style={{ color: "var(--color-impact-400)" }}>✨</span> ImpactCaddy
           </div>
-          <p style={{ color: "var(--color-text-secondary)", marginTop: 8, fontSize: "0.9375rem" }}>
-            Join the community. Play golf. Give back.
+          <p style={{ color: "var(--color-text-secondary)", marginTop: 12, fontSize: "1rem" }}>
+            Join the movement. Change the future.
           </p>
         </div>
 
@@ -195,8 +203,8 @@ export default function SignupPage() {
             </div>
           )}
 
-          <button type="submit" className="btn btn-primary btn-lg" disabled={loading} style={{ width: "100%" }}>
-            {loading ? "Creating account…" : "Create Account"}
+          <button type="submit" className="btn btn-accent btn-lg premium-glow" disabled={loading} style={{ width: "100%", marginTop: 12 }}>
+            {loading ? "Committing..." : "Begin Your Impact Flow"}
           </button>
         </form>
 
